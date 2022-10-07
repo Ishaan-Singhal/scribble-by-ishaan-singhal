@@ -4,6 +4,7 @@ import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
 
 import { setAuthHeaders } from "apis/axios";
 
+import Articles from "./components/Dashboard/Articles";
 import Navbar from "./components/Dashboard/Navbar";
 
 const App = () => {
@@ -20,7 +21,7 @@ const App = () => {
     <Router>
       <Switch>
         <Route exact path="/" render={() => <Navbar />} />
-        <Route exact path="/about" render={() => <div>About</div>} />
+        <Route exact path="/articles" render={() => <Articles />} />
       </Switch>
     </Router>
   );
