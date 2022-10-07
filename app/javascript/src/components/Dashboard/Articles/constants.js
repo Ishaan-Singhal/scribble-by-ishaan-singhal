@@ -25,3 +25,93 @@ export const CATEGORIES = [
     count: 10,
   },
 ];
+
+export const ARTICLES = [
+  {
+    id: 0,
+    title: "Welcome to scribble",
+    createdAt: "2018-04-13 19:18",
+    author: "Oliver Smith",
+    category: "Getting Started",
+    status: "draft",
+  },
+  {
+    id: 1,
+    title: "Welcome to scribble",
+    createdAt: "2018-04-13 19:18",
+    author: "Oliver Smith",
+    category: "Getting Started",
+    status: "draft",
+  },
+  {
+    id: 2,
+    title: "Welcome to scribble",
+    createdAt: "2018-04-13 19:18",
+    author: "Oliver Smith",
+    category: "Getting Started",
+    status: "draft",
+  },
+  {
+    id: 3,
+    title: "Welcome to scribble",
+    createdAt: "2018-04-13 19:18",
+    author: "Oliver Smith",
+    category: "Getting Started",
+    status: "draft",
+  },
+  {
+    id: 4,
+    title: "Welcome to scribble",
+    createdAt: "2018-04-13 19:18",
+    author: "Oliver Smith",
+    category: "Getting Started",
+    status: "draft",
+  },
+  {
+    id: 5,
+    title: "Welcome to scribble",
+    createdAt: "2018-04-13 19:18",
+    author: "Oliver Smith",
+    category: "Getting Started",
+    status: "draft",
+  },
+  {
+    id: 6,
+    title: "Welcome to scribble",
+    createdAt: "2018-04-13 19:18",
+    author: "Oliver Smith",
+    category: "Getting Started",
+    status: "draft",
+  },
+  {
+    id: 7,
+    title: "Welcome to scribble",
+    createdAt: "2018-04-13 19:18",
+    author: "Oliver Smith",
+    category: "Getting Started",
+    status: "draft",
+  },
+];
+
+export const ARTICLE_COLUMNS = [
+  {
+    id: 1,
+    label: "Title",
+  },
+  {
+    id: 2,
+    label: "Date",
+  },
+  {
+    id: 3,
+    label: "Author",
+  },
+  {
+    id: 4,
+    label: "Category",
+  },
+  {
+    id: 5,
+    label: "Status",
+  },
+];
