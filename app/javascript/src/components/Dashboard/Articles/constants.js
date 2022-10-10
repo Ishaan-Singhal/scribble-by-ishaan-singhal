@@ -97,21 +97,26 @@ export const ARTICLE_COLUMNS = [
   {
     id: 1,
     label: "Title",
+    columnName: "title",
   },
   {
     id: 2,
     label: "Date",
+    columnName: "createdAt",
   },
   {
     id: 3,
     label: "Author",
+    columnName: "author",
   },
   {
     id: 4,
     label: "Category",
+    columnName: "category",
   },
   {
     id: 5,
     label: "Status",
+    columnName: "status",
   },
 ];
