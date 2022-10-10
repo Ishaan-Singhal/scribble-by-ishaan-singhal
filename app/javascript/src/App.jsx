@@ -6,6 +6,7 @@ import { setAuthHeaders } from "apis/axios";
 import "lib/dayjs";
 
 import Articles from "./components/Dashboard/Articles";
+import Create from "./components/Dashboard/Articles/Form/Create";
 import Navbar from "./components/Dashboard/Navbar";
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
       <Switch>
         <Route exact path="/" render={() => <Navbar />} />
         <Route exact path="/articles" render={() => <Articles />} />
+        <Route exact path="/articles/new" render={() => <Create />} />
       </Switch>
     </Router>
   );
