@@ -51,9 +51,9 @@ const Redirections = () => {
                   });
                 }}
               />
-              <div className="flex">
+              <div className="col-span-1 ">
                 <Button
-                  className="col-span-1 mr-4"
+                  className="mr-4"
                   icon={Check}
                   style="text"
                   onClick={() => {
