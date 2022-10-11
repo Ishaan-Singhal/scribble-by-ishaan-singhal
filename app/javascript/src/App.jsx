@@ -9,6 +9,8 @@ import Articles from "./components/Dashboard/Articles";
 import Create from "./components/Dashboard/Articles/Form/Create";
 import Navbar from "./components/Dashboard/Navbar";
 import Settings from "./components/Dashboard/Settings";
+import Eui from "./components/EUI";
+import PasswordProtected from "./components/EUI/PasswordProtected";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -27,6 +29,8 @@ const App = () => {
         <Route exact path="/articles" render={() => <Articles />} />
         <Route exact path="/articles/new" render={() => <Create />} />
         <Route exact path="/settings" render={() => <Settings />} />
+        <Route exact path="/eui" render={() => <Eui />} />
+        <Route exact path="/eui/login" render={() => <PasswordProtected />} />
       </Switch>
     </Router>
   );
