@@ -14,7 +14,9 @@ module ScribbleByIshaanSinghal
     config.load_defaults 6.1
     config.generators do |g|
       g.test_framework :test_unit, fixture: false
+      g.orm :active_record, primary_key_type: :uuid
     end
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
