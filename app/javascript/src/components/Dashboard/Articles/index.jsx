@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Plus } from "neetoicons";
-import { Button, Dropdown, Checkbox, Typography } from "neetoui";
+import {
+  Button,
+  Dropdown,
+  Checkbox,
+  Typography,
+  PageLoader,
+  Alert,
+} from "neetoui";
 import { Container, Header, SubHeader } from "neetoui/layouts";
 import { useHistory } from "react-router-dom";
+
+import articlesApi from "apis/articles";
 
 import { ARTICLE_COLUMNS } from "./constants";
 import Menu from "./Menu";
@@ -22,12 +31,64 @@ const Articles = () => {
     category: true,
     status: true,
   });
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
+  const [selectedSlug, setSelectedSlug] = useState("");
+  const [showArticles, setShowArticles] = useState({
+    status: "all",
+  });
+
+  const handleEdit = slug => {
+    history.push(`articles/${slug}/edit`);
+  };
+
+  const fetchArticles = async () => {
+    try {
+      const {
+        data: { articles },
+      } = await articlesApi.list();
+      setArticles(articles);
+    } catch (error) {
+      logger.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const destroyArticle = async slug => {
+    try {
+      await articlesApi.destroy({ slug, quiet: true });
+      await fetchArticles();
+    } catch (error) {
+      logger.error(error);
+    } finally {
+      setSelectedSlug("");
+      setShowAlert(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchArticles();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="h-screen">
+        <PageLoader />
+      </div>
+    );
+  }
 
   return (
     <div>
       <Navbar />
       <div className="flex">
-        <Menu />
+        <Menu
+          articles={articles}
+          setShowArticles={setShowArticles}
+          showArticles={showArticles}
+        />
         <Container>
           <Header
             actionBlock={
@@ -59,7 +120,7 @@ const Articles = () => {
                   icon={Plus}
                   label="Add New Article"
                   onClick={() => {
-                    history.push("articles/new");
+                    history.push("articles/create");
                   }}
                 />
               </>
@@ -72,11 +133,29 @@ const Articles = () => {
           <SubHeader
             leftActionBlock={
               <Typography component="h4" style="h4">
-                118 Articles
+                {articles[showArticles.status].length} Articles
               </Typography>
             }
           />
-          <Table isColumnVisible={isColumnVisible} />
+          <Table
+            articleVisible={showArticles}
+            articles={articles}
+            handleEdit={handleEdit}
+            isColumnVisible={isColumnVisible}
+            setSelectedSlug={setSelectedSlug}
+            setShowAlert={setShowAlert}
+          />
+          {showAlert && (
+            <Alert
+              isOpen={showAlert}
+              message="Are you sure you want to delete this article?"
+              title="You are gonna delete article!"
+              onClose={() => setShowAlert(false)}
+              onSubmit={() => {
+                destroyArticle(selectedSlug);
+              }}
+            />
+          )}
         </Container>
       </div>
     </div>

@@ -4,10 +4,16 @@ import { Table as NeetoUITable, Typography } from "neetoui";
 
 import { monthDateFormatter } from "utils/date";
 
-import { ARTICLES } from "./constants";
 import { renderActionButtons } from "./utils";
 
-const Table = ({ isColumnVisible }) => {
+const Table = ({
+  articleVisible,
+  articles,
+  isColumnVisible,
+  setSelectedSlug,
+  setShowAlert,
+  handleEdit,
+}) => {
   const columnData = [
     {
       title: "Title",
@@ -23,26 +29,26 @@ const Table = ({ isColumnVisible }) => {
     },
     {
       title: "Date",
-      dataIndex: "createdAt",
-      key: "createdAt",
+      dataIndex: "date",
+      key: "date",
       width: "15%",
       render: monthDateFormatter,
       hidden: isColumnVisible.createdAt,
     },
-    {
-      title: "Author",
-      dataIndex: "author",
-      key: "author",
-      width: "15%",
-      hidden: isColumnVisible.author,
-    },
-    {
-      title: "Category",
-      dataIndex: "category",
-      key: "category",
-      width: "20%",
-      hidden: isColumnVisible.category,
-    },
+    // {
+    //   title: "Author",
+    //   dataIndex: "author",
+    //   key: "author",
+    //   width: "15%",
+    //   hidden: isColumnVisible.author,
+    // },
+    // {
+    //   title: "Category",
+    //   dataIndex: "category",
+    //   key: "category",
+    //   width: "20%",
+    //   hidden: isColumnVisible.category,
+    // },
     {
       title: "Status",
       dataIndex: "status",
@@ -52,16 +58,21 @@ const Table = ({ isColumnVisible }) => {
     },
     {
       title: "",
-      dataIndex: "id",
-      key: "id",
+      dataIndex: "slug",
+      key: "slug",
       width: "10%",
-      render: () => renderActionButtons(),
+      render: slug =>
+        renderActionButtons(slug, setSelectedSlug, setShowAlert, handleEdit),
       hidden: isColumnVisible.title,
     },
   ].filter(col => col.hidden);
 
   return (
-    <NeetoUITable allowRowClick columnData={columnData} rowData={ARTICLES} />
+    <NeetoUITable
+      allowRowClick
+      columnData={columnData}
+      rowData={articles[articleVisible.status]}
+    />
   );
 };
 

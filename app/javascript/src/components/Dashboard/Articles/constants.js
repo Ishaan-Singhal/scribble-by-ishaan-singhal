@@ -126,7 +126,7 @@ export const ARTICLE_COLUMNS = [
 export const ARTICLE_INITIAL_VALUES = {
   title: "",
   category: null,
-  body: "",
+  content: "",
 };
 
 export const ARTICLES_VALIDATION = yup.object().shape({
@@ -139,5 +139,5 @@ export const ARTICLES_VALIDATION = yup.object().shape({
       value: yup.number().oneOf(CATEGORIES.map(category => category.id)),
     })
     .required("Please select a category."),
-  body: yup.string(),
+  content: yup.string(),
 });
