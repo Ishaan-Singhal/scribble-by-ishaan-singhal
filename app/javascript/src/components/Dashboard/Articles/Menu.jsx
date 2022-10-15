@@ -6,15 +6,23 @@ import { MenuBar } from "neetoui/layouts";
 
 import { CATEGORIES } from "./constants";
 
-const Menu = () => {
+const Menu = ({ articles, showArticles, setShowArticles }) => {
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
   const SHOW_MENU = true;
+  const capitalize = word =>
+    word[0].toUpperCase() + word.slice(1).toLowerCase();
 
   return (
     <MenuBar showMenu={SHOW_MENU} title="Articles">
-      <MenuBar.Block active count={13} label="All" />
-      <MenuBar.Block count={2} label="Draft" />
-      <MenuBar.Block count={7} label="Published" />
+      {Object.keys(articles).map(keyStatus => (
+        <MenuBar.Block
+          active={keyStatus === showArticles.status}
+          count={articles[keyStatus].length}
+          key={keyStatus}
+          label={capitalize(keyStatus)}
+          onClick={() => setShowArticles({ status: keyStatus })}
+        />
+      ))}
       <MenuBar.SubTitle
         iconProps={[
           {

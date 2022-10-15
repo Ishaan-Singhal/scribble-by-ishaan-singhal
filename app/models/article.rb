@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Article < ApplicationRecord
+  enum status: { published: "published", draft: "draft" }
+
   validates :title, :status, presence: true
   validates :slug, uniqueness: true
   validate :slug_not_changed

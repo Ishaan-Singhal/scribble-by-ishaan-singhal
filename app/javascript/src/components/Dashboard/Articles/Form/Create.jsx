@@ -2,12 +2,16 @@ import React from "react";
 
 import Form from ".";
 
-import { ARTICLE_INITIAL_VALUES } from "../constants";
+const Create = ({ history }) => {
+  const onClose = () => {
+    history.push("/");
+  };
 
-const Create = () => (
-  <div className="flex justify-center">
-    <Form article={ARTICLE_INITIAL_VALUES} />
-  </div>
-);
+  return (
+    <div className="flex justify-center">
+      <Form closeForm={onClose} isEdit={false} />
+    </div>
+  );
+};
 
 export default Create;
