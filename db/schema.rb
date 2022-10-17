@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_16_055520) do
+ActiveRecord::Schema.define(version: 2022_10_17_100816) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 2022_10_16_055520) do
     t.string "title", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "position"
   end
 
   add_foreign_key "articles", "categories"

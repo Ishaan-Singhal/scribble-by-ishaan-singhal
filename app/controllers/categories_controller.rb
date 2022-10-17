@@ -4,11 +4,11 @@ class CategoriesController < ApplicationController
   before_action :load_category!, only: %i[update destroy]
 
   def index
-    @categories = Category.all
+    @categories = Category.all.order("position ASC")
   end
 
   def create
-    category = Category.new!(category_params)
+    category = Category.new(category_params)
     category.save!
     respond_with_success("Category successfully created")
   end
@@ -30,6 +30,6 @@ class CategoriesController < ApplicationController
     end
 
     def category_params
-      params.require(:category).permit(:title)
+      params.require(:category).permit(:title, :position)
     end
 end

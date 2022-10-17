@@ -1,16 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Plus, Right, Close, Check } from "neetoicons";
-import { Typography, Button, Input } from "neetoui";
+import { Typography, Button, Input, PageLoader } from "neetoui";
 import { Container, Header } from "neetoui/layouts";
 
-import Card from "./Card";
+import categoriesApi from "apis/categories";
 
-import { CATEGORIES } from "../constants";
+import List from "./List";
 
 const ManageCategory = () => {
-  const [category, setCategory] = useState(false);
-  const [newCategory, setNewCategory] = useState(null);
+  const [addCategory, setAddCategory] = useState(false);
+  const [newCategory, setNewCategory] = useState("");
+  const [categoriesList, setCategoriesList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await categoriesApi.list();
+      setCategoriesList(response.data.categories);
+    } catch (error) {
+      logger.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createCategory = async () => {
+    try {
+      await categoriesApi.create({ title: newCategory });
+      setAddCategory(false);
+      await fetchCategories();
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="h-screen w-screen">
+        <PageLoader />
+      </div>
+    );
+  }
 
   return (
     <Container>
@@ -24,19 +59,16 @@ const ManageCategory = () => {
           icon={Plus}
           label="Add New Category"
           style="link"
-          onClick={() => setCategory(true)}
+          onClick={() => setAddCategory(true)}
         />
-        {category && (
+        {addCategory && (
           <div className="flex w-full justify-between">
             <div className="flex">
               <Right size={24} />
               <Input
-                value=""
+                value={newCategory}
                 onChange={e => {
-                  setNewCategory({
-                    ...newCategory,
-                    to: e.target.value,
-                  });
+                  setNewCategory(e.target.value);
                 }}
               />
             </div>
@@ -45,18 +77,19 @@ const ManageCategory = () => {
                 className="mr-4"
                 icon={Check}
                 style="text"
-                onClick={() => {}}
+                onClick={() => createCategory()}
               />
               <Button
                 icon={Close}
                 style="text"
-                onClick={() => setCategory(false)}
+                onClick={() => setAddCategory(false)}
               />
             </div>
           </div>
         )}
-        {CATEGORIES.length > 0 &&
-          CATEGORIES.map(cat => <Card key={cat.id} title={cat.title} />)}
+        {categoriesList.length > 0 && (
+          <List categories={categoriesList} fetchCategories={fetchCategories} />
+        )}
       </div>
     </Container>
   );
