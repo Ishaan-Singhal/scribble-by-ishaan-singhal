@@ -4,7 +4,7 @@ import { Table as NeetoUITable, Typography } from "neetoui";
 
 import { monthDateFormatter } from "utils/date";
 
-import { renderActionButtons } from "./utils";
+import { renderActionButtons, renderCategoryTitle } from "./utils";
 
 const Table = ({
   articleVisible,
@@ -42,13 +42,14 @@ const Table = ({
     //   width: "15%",
     //   hidden: isColumnVisible.author,
     // },
-    // {
-    //   title: "Category",
-    //   dataIndex: "category",
-    //   key: "category",
-    //   width: "20%",
-    //   hidden: isColumnVisible.category,
-    // },
+    {
+      title: "Category",
+      dataIndex: "category",
+      key: "category",
+      width: "20%",
+      render: category => renderCategoryTitle(category),
+      hidden: isColumnVisible.category,
+    },
     {
       title: "Status",
       dataIndex: "status",

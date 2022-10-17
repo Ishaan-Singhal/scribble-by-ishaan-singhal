@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Delete, Edit } from "neetoicons";
-import { Button } from "neetoui";
+import { Button, Tag } from "neetoui";
 
 export const renderActionButtons = (
   slug,
@@ -26,4 +26,8 @@ export const renderActionButtons = (
       }}
     />
   </div>
+);
+
+export const renderCategoryTitle = category => (
+  <Tag label={category.title} style="secondary" />
 );
