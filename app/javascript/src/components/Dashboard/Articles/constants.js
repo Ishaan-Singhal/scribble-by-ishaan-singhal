@@ -1,5 +1,3 @@
-import * as yup from "yup";
-
 export const CATEGORIES = [
   {
     id: 0,
@@ -125,19 +123,6 @@ export const ARTICLE_COLUMNS = [
 
 export const ARTICLE_INITIAL_VALUES = {
   title: "",
-  category: null,
+  category: { label: null, value: null },
   content: "",
 };
-
-export const ARTICLES_VALIDATION = yup.object().shape({
-  title: yup.string().required("Title is required"),
-  category: yup
-    .object()
-    .nullable()
-    .shape({
-      label: yup.string().oneOf(CATEGORIES.map(category => category.title)),
-      value: yup.number().oneOf(CATEGORIES.map(category => category.id)),
-    })
-    .required("Please select a category."),
-  content: yup.string(),
-});

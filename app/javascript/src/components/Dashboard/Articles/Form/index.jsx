@@ -4,20 +4,33 @@ import { Formik, Form as FormikForm } from "formik";
 import { Down } from "neetoicons";
 import { Button, Dropdown } from "neetoui";
 import { Input, Textarea, Select } from "neetoui/formik";
+import * as yup from "yup";
 
 import articlesApi from "apis/articles";
 
-import {
-  ARTICLES_VALIDATION,
-  CATEGORIES,
-  ARTICLE_INITIAL_VALUES,
-} from "../constants";
+import { ARTICLE_INITIAL_VALUES } from "../constants";
 
 const { Menu, MenuItem } = Dropdown;
 
-const Form = ({ closeForm, isEdit, article }) => {
+const Form = ({ closeForm, isEdit, article, categories }) => {
   const [isDraft, setIsDraft] = useState("draft");
   const [submitted, setSubmitted] = useState(false);
+
+  const ARTICLES_VALIDATION = yup.object().shape({
+    title: yup.string().required("Title is required"),
+    category: yup
+      .object()
+      .nullable()
+      .shape({
+        label: yup.string().oneOf(categories.map(category => category.title)),
+        value: yup
+          .string()
+          .uuid()
+          .oneOf(categories.map(category => category.id)),
+      })
+      .required("Please select a category."),
+    content: yup.string(),
+  });
 
   const handleSubmit = async values => {
     try {
@@ -29,6 +42,7 @@ const Form = ({ closeForm, isEdit, article }) => {
             title: values.title,
             content: values.content,
             status: isDraft,
+            category_id: values.category.value,
           },
         });
       } else {
@@ -36,6 +50,7 @@ const Form = ({ closeForm, isEdit, article }) => {
           title: values.title,
           content: values.content,
           status: isDraft,
+          category_id: values.category.value,
         });
       }
       closeForm();
@@ -54,7 +69,10 @@ const Form = ({ closeForm, isEdit, article }) => {
           ? {
               title: article.title,
               content: article.content,
-              category: null,
+              category: {
+                label: article.category.title,
+                value: article.category.id,
+              },
             }
           : ARTICLE_INITIAL_VALUES
       }
@@ -76,7 +94,7 @@ const Form = ({ closeForm, isEdit, article }) => {
               label="Category"
               name="category"
               placeholder="Select a Category"
-              options={CATEGORIES.map(category => ({
+              options={categories.map(category => ({
                 value: category.id,
                 label: category.title,
               }))}

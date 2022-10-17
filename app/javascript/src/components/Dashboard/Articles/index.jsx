@@ -13,6 +13,7 @@ import { Container, Header, SubHeader } from "neetoui/layouts";
 import { useHistory } from "react-router-dom";
 
 import articlesApi from "apis/articles";
+import categoriesApi from "apis/categories";
 
 import { ARTICLE_COLUMNS } from "./constants";
 import Menu from "./Menu";
@@ -38,9 +39,21 @@ const Articles = () => {
   const [showArticles, setShowArticles] = useState({
     status: "all",
   });
+  const [categoriesList, setCategoriesList] = useState([]);
 
   const handleEdit = slug => {
     history.push(`articles/${slug}/edit`);
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const {
+        data: { categories },
+      } = await categoriesApi.list();
+      setCategoriesList(categories);
+    } catch (error) {
+      logger.error(error);
+    }
   };
 
   const fetchArticles = async () => {
@@ -48,7 +61,17 @@ const Articles = () => {
       const {
         data: { articles },
       } = await articlesApi.list();
+      logger.info(articles);
       setArticles(articles);
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      await Promise.all([fetchCategories(), fetchArticles()]);
     } catch (error) {
       logger.error(error);
     } finally {
@@ -69,7 +92,7 @@ const Articles = () => {
   };
 
   useEffect(() => {
-    fetchArticles();
+    loadData();
   }, []);
 
   if (loading) {
@@ -86,6 +109,7 @@ const Articles = () => {
       <div className="flex">
         <Menu
           articles={articles}
+          categories={categoriesList}
           setShowArticles={setShowArticles}
           showArticles={showArticles}
         />

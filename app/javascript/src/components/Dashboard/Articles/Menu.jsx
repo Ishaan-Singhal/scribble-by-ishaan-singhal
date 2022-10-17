@@ -4,9 +4,7 @@ import { Search, Plus } from "neetoicons";
 import { Typography } from "neetoui";
 import { MenuBar } from "neetoui/layouts";
 
-import { CATEGORIES } from "./constants";
-
-const Menu = ({ articles, showArticles, setShowArticles }) => {
+const Menu = ({ articles, showArticles, setShowArticles, categories }) => {
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
   const SHOW_MENU = true;
   const capitalize = word =>
@@ -48,7 +46,7 @@ const Menu = ({ articles, showArticles, setShowArticles }) => {
         collapse={isSearchCollapsed}
         onCollapse={() => setIsSearchCollapsed(true)}
       />
-      {CATEGORIES.map(category => (
+      {categories.map(category => (
         <MenuBar.Block
           count={category.count}
           key={category.id}
