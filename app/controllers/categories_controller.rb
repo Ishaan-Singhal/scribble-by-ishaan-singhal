@@ -23,6 +23,12 @@ class CategoriesController < ApplicationController
     respond_with_success("Deleted category successfully")
   end
 
+  def move_and_delete
+    articles = Article.where(category_id: params[:curr_id]).update_all(category_id: params[:destination_id])
+    Category.find_by!(id: params[:curr_id]).destroy!
+    respond_with_success("Deleted category successfully")
+  end
+
   private
 
     def load_category!

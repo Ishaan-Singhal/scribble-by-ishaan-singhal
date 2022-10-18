@@ -8,7 +8,12 @@ import categoriesApi from "apis/categories";
 
 import Card from "./Card";
 
-const List = ({ categories, fetchCategories }) => {
+const List = ({
+  categories,
+  fetchCategories,
+  setDeleteCategory,
+  setShowDeleteAlert,
+}) => {
   const [categoryId, setCategoryId] = useState("");
   const [categoryTitle, setCategoryTitle] = useState("");
 
@@ -40,15 +45,6 @@ const List = ({ categories, fetchCategories }) => {
       logger.error(error);
     }
   };
-
-  // const destroyCategory = async (categoryId) => {
-  //   try {
-  //     await categoriesApi.destroy(categoryId);
-  //     await fetchCategories();
-  //   } catch (error) {
-  //     logger.error(error);
-  //   }
-  // };
 
   const handleOnDragEnd = result => {
     if (!result.destination) return;
@@ -82,6 +78,8 @@ const List = ({ categories, fetchCategories }) => {
                         category={category}
                         setCategoryId={setCategoryId}
                         setCategoryTitle={setCategoryTitle}
+                        setDeleteCategory={setDeleteCategory}
+                        setShowDeleteAlert={setShowDeleteAlert}
                       />
                     ) : (
                       <div className="flex w-full justify-between">
