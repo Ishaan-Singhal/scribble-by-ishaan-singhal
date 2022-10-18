@@ -18,11 +18,18 @@ const destroy = ({ id, quiet }) => {
   return axios.delete(path);
 };
 
+const moveAndDelete = ({ currId, destinationId }) => {
+  const path = `/categories/delete/${currId}/${destinationId}`;
+
+  return axios.delete(path);
+};
+
 const categoriesApi = {
   list,
   create,
   update,
   destroy,
+  moveAndDelete,
 };
 
 export default categoriesApi;

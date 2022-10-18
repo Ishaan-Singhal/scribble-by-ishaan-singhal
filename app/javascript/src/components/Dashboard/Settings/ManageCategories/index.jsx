@@ -6,6 +6,7 @@ import { Container, Header } from "neetoui/layouts";
 
 import categoriesApi from "apis/categories";
 
+import DeleteModal from "./DeleteModal";
 import List from "./List";
 
 const ManageCategory = () => {
@@ -13,6 +14,8 @@ const ManageCategory = () => {
   const [newCategory, setNewCategory] = useState("");
   const [categoriesList, setCategoriesList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const [deleteCategory, setDeleteCategory] = useState(null);
 
   const fetchCategories = async () => {
     try {
@@ -88,7 +91,21 @@ const ManageCategory = () => {
           </div>
         )}
         {categoriesList.length > 0 && (
-          <List categories={categoriesList} fetchCategories={fetchCategories} />
+          <List
+            categories={categoriesList}
+            fetchCategories={fetchCategories}
+            setDeleteCategory={setDeleteCategory}
+            setShowDeleteAlert={setShowDeleteAlert}
+          />
+        )}
+        {showDeleteAlert && (
+          <DeleteModal
+            categories={categoriesList}
+            deleteCategory={deleteCategory}
+            fetchCategories={fetchCategories}
+            setShowDeleteAlert={setShowDeleteAlert}
+            showDeleteAlert={showDeleteAlert}
+          />
         )}
       </div>
     </Container>
