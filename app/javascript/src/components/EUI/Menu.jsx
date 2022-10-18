@@ -1,22 +1,28 @@
 import React from "react";
 
-import { Typography, Accordion } from "neetoui";
+import { Accordion } from "neetoui";
 import { MenuBar } from "neetoui/layouts";
+import { useHistory } from "react-router-dom";
 
-import { CATEGORY_VALUES } from "./constants";
-
-const Menu = () => {
+const Menu = ({ categories, selectedArticle }) => {
   const SHOW_MENU = true;
+  const history = useHistory();
 
   return (
     <MenuBar showMenu={SHOW_MENU}>
-      <Accordion defaultActiveKey={0}>
-        {CATEGORY_VALUES.map(category => (
+      <Accordion defaultActiveKey={selectedArticle?.category?.position - 1}>
+        {categories.map(category => (
           <Accordion.Item key={category.id} title={category.title}>
-            {category.articles.map((article, idx) => (
-              <Typography className="m-2" key={idx} style="body2">
-                {article}
-              </Typography>
+            {category.articles.map(article => (
+              <div
+                className="m-2 cursor-pointer"
+                key={article.id}
+                onClick={() => {
+                  history.push(`/public/${article.slug}`);
+                }}
+              >
+                {article.title}
+              </div>
             ))}
           </Accordion.Item>
         ))}

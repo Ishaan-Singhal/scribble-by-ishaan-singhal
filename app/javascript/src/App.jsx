@@ -19,6 +19,7 @@ import {
   DASHBOARD_PATH,
   DASHBOARD_ROUTES,
   EUI_PATH,
+  EUI_SLUG_PATH,
 } from "./components/routeConstants";
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
     <Router>
       <ToastContainer />
       <Switch>
+        <Route exact component={Eui} path={EUI_SLUG_PATH} />
         <Route exact component={Eui} path={EUI_PATH} />
         {DASHBOARD_ROUTES.map(({ path, component }) => (
           <Route exact component={component} key={path} path={path} />

@@ -7,5 +7,6 @@ json.status article.status
 json.category do
   json.extract! article.category,
     :id,
-    :title
+    :title,
+    :position
 end

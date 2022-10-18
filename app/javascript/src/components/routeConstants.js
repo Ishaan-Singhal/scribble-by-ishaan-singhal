@@ -5,6 +5,7 @@ import Settings from "./Dashboard/Settings";
 
 export const DASHBOARD_PATH = "/";
 export const EUI_PATH = "/public";
+export const EUI_SLUG_PATH = "/public/:slug";
 export const ARTICLES_PATH = "/articles";
 export const CREATE_ARTICLE_PATH = "/articles/create";
 export const EDIT_ARTICLE_PATH = "/articles/:slug/edit";
