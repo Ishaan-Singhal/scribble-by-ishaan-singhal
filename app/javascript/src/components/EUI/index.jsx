@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { Typography, Tag, Label, PageLoader } from "neetoui";
 import { Container } from "neetoui/layouts";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
@@ -12,8 +12,8 @@ import Menu from "./Menu";
 import Navbar from "./Navbar";
 
 const Eui = () => {
-  let { slug } = useParams();
-
+  const { slug } = useParams();
+  const history = useHistory();
   const [categoryList, setCategoryList] = useState([]);
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -23,11 +23,15 @@ const Eui = () => {
       const {
         data: { categories },
       } = await categoriesApi.list();
-      slug = slug || categories[0].articles[0].slug;
+      if (!slug) {
+        history.push(`/public/${categories[0]?.articles[0]?.slug}`);
+      }
       logger.info(slug);
       setCategoryList(categories);
     } catch (error) {
       logger.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -40,19 +44,13 @@ const Eui = () => {
     }
   };
 
-  const loadData = async () => {
-    try {
-      await Promise.all([fetchCategories(), fetchArticle()]);
-    } catch (error) {
-      logger.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
-    loadData();
-  }, []);
+    slug && fetchArticle();
+  }, [slug]);
 
   if (loading) {
     return (
@@ -66,25 +64,21 @@ const Eui = () => {
     <>
       <Navbar />
       <div className="flex">
-        <Menu
-          categories={categoryList}
-          selectedArticle={selectedArticle}
-          setSelectedArticle={setSelectedArticle}
-        />
+        <Menu categories={categoryList} selectedArticle={selectedArticle} />
         <Container>
           <Typography className="my-2" style="h1">
-            {selectedArticle.title}
+            {selectedArticle?.title}
           </Typography>
           <div className="flex">
             <Tag
               className="mr-4"
-              label={selectedArticle.category.title}
+              label={selectedArticle?.category.title}
               style="info"
             />
-            <Label>{monthDateFormatter(selectedArticle.date)}</Label>
+            <Label>{monthDateFormatter(selectedArticle?.date)}</Label>
           </div>
           <Typography className="my-4" style="body2">
-            {selectedArticle.content}
+            {selectedArticle?.content}
           </Typography>
         </Container>
       </div>
