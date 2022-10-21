@@ -11,13 +11,15 @@ const Navbar = () => (
       </div>
       <div className="text-gray-500 ">
         <NavLink
-          className="pr-4 font-semibold hover:text-black focus:text-indigo-500"
+          activeStyle={{ color: "rgb(var(--neeto-ui-primary-500))" }}
+          className="pr-4 font-semibold hover:text-black"
           to="/articles"
         >
           Articles
         </NavLink>
         <NavLink
-          className="pr-4 font-semibold hover:text-black focus:text-indigo-500"
+          activeStyle={{ color: "rgb(var(--neeto-ui-primary-500))" }}
+          className="pr-4 font-semibold hover:text-black"
           to="/settings"
         >
           Settings

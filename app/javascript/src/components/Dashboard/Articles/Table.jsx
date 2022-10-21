@@ -13,7 +13,13 @@ const Table = ({
   setSelectedSlug,
   setShowAlert,
   handleEdit,
+  selectedCategories,
 }) => {
+  const myFilter = myCategories =>
+    function filterData(value) {
+      return !(myCategories.indexOf(value.category.title) === -1);
+    };
+
   const columnData = [
     {
       title: "Title",
@@ -72,7 +78,11 @@ const Table = ({
     <NeetoUITable
       allowRowClick
       columnData={columnData}
-      rowData={articles[articleVisible.status]}
+      rowData={
+        selectedCategories.length > 0
+          ? articles.all.filter(myFilter(selectedCategories))
+          : articles[articleVisible.status]
+      }
     />
   );
 };

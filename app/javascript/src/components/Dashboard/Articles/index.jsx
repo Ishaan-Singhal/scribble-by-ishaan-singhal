@@ -39,6 +39,7 @@ const Articles = () => {
   const [showArticles, setShowArticles] = useState({
     status: "all",
   });
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [categoriesList, setCategoriesList] = useState([]);
 
   const handleEdit = slug => {
@@ -110,6 +111,8 @@ const Articles = () => {
         <Menu
           articles={articles}
           categories={categoriesList}
+          selectedCategories={selectedCategories}
+          setSelectedCategories={setSelectedCategories}
           setShowArticles={setShowArticles}
           showArticles={showArticles}
         />
@@ -166,6 +169,7 @@ const Articles = () => {
             articles={articles}
             handleEdit={handleEdit}
             isColumnVisible={isColumnVisible}
+            selectedCategories={selectedCategories}
             setSelectedSlug={setSelectedSlug}
             setShowAlert={setShowAlert}
           />
