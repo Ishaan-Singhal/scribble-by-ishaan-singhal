@@ -13,7 +13,7 @@ class ArticlesController < ApplicationController
   def create
     article = Article.new(article_params)
     article.save!
-    respond_with_success("Article was successfully created!")
+    respond_with_success(t("successfully_created", entity: "Article"))
   end
 
   def show
@@ -23,12 +23,12 @@ class ArticlesController < ApplicationController
   def update
     article = Article.find_by!(slug: params[:slug])
     article.update!(article_params)
-    respond_with_success("Article was successfully updated!")
+    respond_with_success(t("successfully_updated", entity: "Article"))
   end
 
   def destroy
     @article.destroy!
-    respond_with_json
+    respond_with_success(t("successfully_deleted", entity: "Article"))
   end
 
   private

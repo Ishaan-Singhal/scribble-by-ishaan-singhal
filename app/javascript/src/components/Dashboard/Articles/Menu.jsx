@@ -4,7 +4,14 @@ import { Search, Plus } from "neetoicons";
 import { Typography } from "neetoui";
 import { MenuBar } from "neetoui/layouts";
 
-const Menu = ({ articles, showArticles, setShowArticles, categories }) => {
+const Menu = ({
+  articles,
+  showArticles,
+  setShowArticles,
+  categories,
+  setSelectedCategories,
+  selectedCategories,
+}) => {
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
   const SHOW_MENU = true;
   const capitalize = word =>
@@ -48,9 +55,22 @@ const Menu = ({ articles, showArticles, setShowArticles, categories }) => {
       />
       {categories.map(category => (
         <MenuBar.Block
+          active={selectedCategories.includes(category.title)}
           count={category.count}
           key={category.id}
           label={category.title}
+          onClick={() => {
+            const idx = selectedCategories.indexOf(category.title);
+            idx === -1
+              ? setSelectedCategories([...selectedCategories, category.title])
+              : setSelectedCategories([
+                  ...selectedCategories.slice(0, idx),
+                  ...selectedCategories.slice(
+                    idx + 1,
+                    selectedCategories.length
+                  ),
+                ]);
+          }}
         />
       ))}
     </MenuBar>

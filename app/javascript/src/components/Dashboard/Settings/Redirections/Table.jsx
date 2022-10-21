@@ -3,13 +3,37 @@ import React, { useState } from "react";
 import { Check, Close, Delete, Edit } from "neetoicons";
 import { Table as NeetoUITable, Button, Typography, Input } from "neetoui";
 
-import { REDIRECTION_INITIAL_VALUES, REDIRECTION_VALUES } from "../constants";
+import redirectionsApi from "apis/redirections";
 
-const Table = () => {
-  const [rowData, setRowData] = useState(REDIRECTION_INITIAL_VALUES);
-  const [editId, setEditId] = useState(0);
+import { REDIRECTION_INITIAL_VALUES } from "../constants";
+
+const Table = ({ redirections, fetchRedirections }) => {
+  const LOCALE = {
+    emptyText: "No redirections added yet",
+  };
   const CURRENT_PAGE_NUMBER = 1;
   const DEFAULT_PAGE_SIZE = 10;
+
+  const [rowData, setRowData] = useState(REDIRECTION_INITIAL_VALUES);
+  const [editId, setEditId] = useState(0);
+
+  const updateRedirection = async () => {
+    try {
+      await redirectionsApi.update({
+        id: rowData.id,
+        payload: {
+          id: rowData.id,
+          from:
+            rowData.from.charAt(0) === "/" ? rowData.from : `/${rowData.from}`,
+          to: rowData.to.charAt(0) === "/" ? rowData.to : `/${rowData.to}`,
+        },
+      });
+      setEditId(0);
+      fetchRedirections();
+    } catch (error) {
+      logger.error(error);
+    }
+  };
 
   const columnData = [
     {
@@ -20,7 +44,6 @@ const Table = () => {
       render: (from, redirectObj) =>
         editId === redirectObj.id ? (
           <Input
-            prefix="/"
             value={rowData.from}
             onChange={e => setRowData({ ...rowData, from: e.target.value })}
           />
@@ -36,7 +59,6 @@ const Table = () => {
       render: (to, redirectObj) =>
         editId === redirectObj.id ? (
           <Input
-            prefix="/"
             value={rowData.to}
             onChange={e => setRowData({ ...rowData, to: e.target.value })}
           />
@@ -57,11 +79,7 @@ const Table = () => {
               icon={Check}
               style="text"
               onClick={() => {
-                setRowData({
-                  id: redirectObj.id,
-                  from: redirectObj.from,
-                  to: redirectObj.to,
-                });
+                updateRedirection();
               }}
             />
             <Button
@@ -82,8 +100,8 @@ const Table = () => {
                 setEditId(redirectObj.id);
                 setRowData({
                   id: redirectObj.id,
-                  from: redirectObj.from.substring(1),
-                  to: redirectObj.to.substring(1),
+                  from: redirectObj.from,
+                  to: redirectObj.to,
                 });
               }}
             />
@@ -104,7 +122,8 @@ const Table = () => {
       columnData={columnData}
       currentPageNumber={CURRENT_PAGE_NUMBER}
       defaultPageSize={DEFAULT_PAGE_SIZE}
-      rowData={REDIRECTION_VALUES}
+      locale={LOCALE}
+      rowData={redirections}
     />
   );
 };

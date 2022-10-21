@@ -32,7 +32,7 @@ class Article < ApplicationRecord
 
     def slug_not_changed
       if slug_changed? && self.persisted?
-        errors.add(:slug, "is immutable")
+        errors.add(:slug, t("article.slug.immutable"))
       end
     end
 end

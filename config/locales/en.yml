@@ -30,4 +30,13 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  successfully_created: "%{entity} was successfully created!"
+  successfully_updated: "%{entity} was successfully updated!"
+  successfully_deleted: "%{entity} was successfully deleted!"
+  not_found: "Couldn't find %{entity}"
+  article:
+    slug:
+      immutable: "is immutable!"
+  redirection:
+    same_path: "Paths cannot be same!"
+    redirection_loop: "Inputs will cause a redirection loop!"
