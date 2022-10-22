@@ -2,6 +2,7 @@
 
 class ArticlesController < ApplicationController
   before_action :load_article!, only: %i[show update destroy]
+  before_action :load_user, only: %i[create]
 
   def index
     articles = Article.all
@@ -11,7 +12,7 @@ class ArticlesController < ApplicationController
   end
 
   def create
-    article = Article.new(article_params)
+    article = Article.new(article_params.merge(user_id: @current_user.id))
     article.save!
     respond_with_success(t("successfully_created", entity: "Article"))
   end

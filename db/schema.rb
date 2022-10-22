@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_21_164304) do
+ActiveRecord::Schema.define(version: 2022_10_22_172556) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -26,8 +26,10 @@ ActiveRecord::Schema.define(version: 2022_10_21_164304) do
     t.datetime "updated_at", precision: 6, null: false
     t.text "content"
     t.uuid "category_id"
+    t.uuid "user_id"
     t.index ["category_id"], name: "index_articles_on_category_id"
     t.index ["slug"], name: "index_articles_on_slug", unique: true
+    t.index ["user_id"], name: "index_articles_on_user_id"
   end
 
   create_table "categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -54,5 +56,16 @@ ActiveRecord::Schema.define(version: 2022_10_21_164304) do
     t.index ["from"], name: "index_redirections_on_from", unique: true
   end
 
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.uuid "organization_id"
+    t.index ["organization_id"], name: "index_users_on_organization_id"
+  end
+
   add_foreign_key "articles", "categories"
+  add_foreign_key "articles", "users"
+  add_foreign_key "users", "organizations"
 end

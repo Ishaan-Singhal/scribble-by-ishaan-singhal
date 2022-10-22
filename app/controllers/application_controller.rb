@@ -3,6 +3,7 @@
 class ApplicationController < ActionController::Base
   include Authenticable
   include LoadOrganization
+  include LoadUser
   rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
   rescue_from ActiveRecord::RecordInvalid, with: :handle_validation_error
   rescue_from ActiveRecord::RecordNotUnique, with: :handle_record_not_unique
