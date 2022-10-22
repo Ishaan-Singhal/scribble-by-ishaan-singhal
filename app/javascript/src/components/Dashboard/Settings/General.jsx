@@ -1,13 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import { Typography, Button, Input, Checkbox } from "neetoui";
+import { Typography, Button, Input, Checkbox, PageLoader } from "neetoui";
 import { Container, Header } from "neetoui/layouts";
 
+import organizationApi from "apis/organizations";
+
 const General = () => {
+  const [loading, setLoading] = useState(true);
+  const [organization, setOrganization] = useState(null);
+  const [password, setPassword] = useState("");
   const [isPasswordEnabled, setIsPasswordEnabled] = useState(false);
-  //const [loading, setLoading] = useState(true);
-  const [organizationName, setOrganizationName] = useState();
-  const [password, setPassword] = useState();
+
+  const fetchOrganization = async () => {
+    try {
+      setLoading(true);
+      const response = await organizationApi.show();
+      logger.info(response.data);
+      setOrganization(response.data.organization);
+      setIsPasswordEnabled(response.data.organization.password_enabled);
+    } catch (error) {
+      logger.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      await organizationApi.update({
+        organization: {
+          id: organization.id,
+          name: organization.name,
+          password,
+          password_enabled: isPasswordEnabled,
+        },
+      });
+    } catch (error) {
+      logger.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrganization();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="h-screen w-screen">
+        <PageLoader />
+      </div>
+    );
+  }
 
   return (
     <Container>
@@ -16,12 +62,14 @@ const General = () => {
         <Typography className="mb-4" style="h4">
           Configure general attributes of Scribble
         </Typography>
-        <form className="max-w-lg" onSubmit={() => {}}>
+        <form className="max-w-lg" onSubmit={handleSubmit}>
           <Input
             helpText="Customize the Organization Name which is used to show as the site name in Open Graph Tags."
             label="Organization Name"
-            value={organizationName}
-            onChange={e => setOrganizationName(e.target.value)}
+            value={organization.name}
+            onChange={e =>
+              setOrganization({ ...organization, name: e.target.value })
+            }
           />
           <div className="border-b mt-5 mb-5" />
           <Checkbox
@@ -34,7 +82,7 @@ const General = () => {
               );
             }}
           />
-          {isPasswordEnabled ? (
+          {isPasswordEnabled && (
             <Input
               className="mt-3"
               label="Password"
@@ -42,7 +90,7 @@ const General = () => {
               value={password}
               onChange={e => setPassword(e.target.value)}
             />
-          ) : null}
+          )}
           <div className="mt-8">
             <Button label="Save Changes" style="primary" type="submit" />
             <Button

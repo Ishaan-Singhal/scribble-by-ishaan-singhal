@@ -1,33 +1,26 @@
 import React, { useState, useEffect } from "react";
 
-import { Typography, Tag, Label, PageLoader } from "neetoui";
-import { Container } from "neetoui/layouts";
-import { useHistory, useParams } from "react-router-dom";
+import { PageLoader } from "neetoui";
+import { Switch, Route, Redirect } from "react-router-dom";
 
-import articlesApi from "apis/articles";
-import categoriesApi from "apis/categories";
-import { monthDateFormatter } from "utils/date";
+import organizationApi from "apis/organizations";
+import { getFromLocalStorage } from "utils/storage";
 
-import Menu from "./Menu";
 import Navbar from "./Navbar";
+import PasswordProtected from "./PasswordProtected";
+import Preview from "./Preview";
 
 const Eui = () => {
-  const { slug } = useParams();
-  const history = useHistory();
-  const [categoryList, setCategoryList] = useState([]);
-  const [selectedArticle, setSelectedArticle] = useState(null);
+  const [organization, setOrganization] = useState(null);
   const [loading, setLoading] = useState(true);
+  const authToken = getFromLocalStorage("authToken");
+  const isLoggedIn = !!authToken;
 
-  const fetchCategories = async () => {
+  const fetchOrganization = async () => {
     try {
-      const {
-        data: { categories },
-      } = await categoriesApi.list();
-      if (!slug) {
-        history.push(`/public/${categories[0]?.articles[0]?.slug}`);
-      }
-      logger.info(slug);
-      setCategoryList(categories);
+      setLoading(true);
+      const response = await organizationApi.show();
+      setOrganization(response.data?.organization);
     } catch (error) {
       logger.error(error);
     } finally {
@@ -35,26 +28,13 @@ const Eui = () => {
     }
   };
 
-  const fetchArticle = async () => {
-    try {
-      const response = await articlesApi.show(slug);
-      setSelectedArticle(response.data.article);
-    } catch (error) {
-      logger.error(error);
-    }
-  };
-
   useEffect(() => {
-    fetchCategories();
+    fetchOrganization();
   }, []);
-
-  useEffect(() => {
-    slug && fetchArticle();
-  }, [slug]);
 
   if (loading) {
     return (
-      <div className="h-screen w-screen">
+      <div className="h-screen">
         <PageLoader />
       </div>
     );
@@ -62,26 +42,15 @@ const Eui = () => {
 
   return (
     <>
-      <Navbar />
-      <div className="flex">
-        <Menu categories={categoryList} selectedArticle={selectedArticle} />
-        <Container>
-          <Typography className="my-2" style="h1">
-            {selectedArticle?.title}
-          </Typography>
-          <div className="flex">
-            <Tag
-              className="mr-4"
-              label={selectedArticle?.category.title}
-              style="info"
-            />
-            <Label>{monthDateFormatter(selectedArticle?.date)}</Label>
-          </div>
-          <Typography className="my-4" style="body2">
-            {selectedArticle?.content}
-          </Typography>
-        </Container>
-      </div>
+      <Navbar organization={organization} />
+      <Switch>
+        <Route exact component={PasswordProtected} path="/public/login" />
+        {organization.password_enabled && !isLoggedIn && (
+          <Redirect to="/public/login" />
+        )}
+        <Route exact component={Preview} path="/public" />
+        <Route exact component={Preview} path="/public/:slug" />
+      </Switch>
     </>
   );
 };

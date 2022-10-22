@@ -17,16 +17,13 @@ const setAuthHeaders = (setLoading = () => null) => {
       .getAttribute("content"),
   };
   const token = getFromLocalStorage("authToken");
-  const email = getFromLocalStorage("authEmail");
-  if (token && email) {
-    axios.defaults.headers["X-Auth-Email"] = email;
+  if (token) {
     axios.defaults.headers["X-Auth-Token"] = token;
   }
   setLoading(false);
 };
 
 const resetAuthTokens = () => {
-  delete axios.defaults.headers["X-Auth-Email"];
   delete axios.defaults.headers["X-Auth-Token"];
 };
 
