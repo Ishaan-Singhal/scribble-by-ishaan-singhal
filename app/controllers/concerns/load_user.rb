@@ -9,7 +9,7 @@ module LoadUser
       admin_user_email = "oliver@example.com"
       @current_user = User.find_by(email: admin_user_email)
       unless @current_user
-        handle_record_not_found("User")
+        respond_with_error("Couldn't find User")
       end
     end
 end
