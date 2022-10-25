@@ -6,6 +6,8 @@ import { MenuBar } from "neetoui/layouts";
 
 import categoriesApi from "apis/categories";
 
+import { searchFilter } from "./utils";
+
 const Menu = ({
   articles,
   showArticles,
@@ -16,6 +18,7 @@ const Menu = ({
   fetchCategories,
 }) => {
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
+  const [searchTitle, setSearchTitle] = useState("");
   const [newCategory, setNewCategory] = useState("");
   const [isInputCollapsed, setIsInputCollapsed] = useState(true);
   const capitalize = word =>
@@ -69,6 +72,9 @@ const Menu = ({
       </MenuBar.SubTitle>
       <MenuBar.Search
         collapse={isSearchCollapsed}
+        placeholder="Search category title"
+        value={searchTitle}
+        onChange={e => setSearchTitle(e.target.value)}
         onCollapse={() => setIsSearchCollapsed(true)}
       />
       {!isInputCollapsed && (
@@ -98,7 +104,7 @@ const Menu = ({
           />
         </div>
       )}
-      {categories.map(category => (
+      {searchFilter(categories, searchTitle).map(category => (
         <MenuBar.Block
           active={selectedCategories.includes(category.id)}
           count={category.count}

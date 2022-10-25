@@ -18,7 +18,7 @@ import categoriesApi from "apis/categories";
 import { ARTICLE_COLUMNS } from "./constants";
 import Menu from "./Menu";
 import Table from "./Table";
-import { searchArticleFilter } from "./utils";
+import { searchFilter } from "./utils";
 
 import Navbar from "../Navbar";
 
@@ -172,15 +172,12 @@ const Articles = () => {
             }
           />
           <Table
+            articles={searchFilter(articles[showArticles.status], searchText)}
             handleEdit={handleEdit}
             isColumnVisible={isColumnVisible}
             selectedCategories={selectedCategories}
             setSelectedSlug={setSelectedSlug}
             setShowAlert={setShowAlert}
-            articles={searchArticleFilter(
-              articles[showArticles.status],
-              searchText
-            )}
           />
           {showAlert && (
             <Alert

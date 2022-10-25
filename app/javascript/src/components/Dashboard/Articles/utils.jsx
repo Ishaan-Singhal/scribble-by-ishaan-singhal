@@ -36,11 +36,11 @@ export const renderAuthorName = author => (
   <Typography style="body2">{author.name}</Typography>
 );
 
-export const searchArticleFilter = (articles, searchTerm) =>
-  articles?.filter(article => {
+export const searchFilter = (dataArray, searchTerm) =>
+  dataArray?.filter(data => {
     if (searchTerm !== "") {
-      return article?.title?.toLowerCase().includes(searchTerm?.toLowerCase());
+      return data?.title?.toLowerCase().includes(searchTerm?.toLowerCase());
     }
 
-    return article;
+    return data;
   });
