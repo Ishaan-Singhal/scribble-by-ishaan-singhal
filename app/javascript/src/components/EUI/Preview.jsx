@@ -64,20 +64,26 @@ const Preview = () => {
     <div className="flex">
       <Menu categories={categoryList} selectedArticle={selectedArticle} />
       <Container>
-        <Typography className="my-2" style="h1">
-          {selectedArticle?.title}
-        </Typography>
-        <div className="flex">
-          <Tag
-            className="mr-4"
-            label={selectedArticle?.category.title}
-            style="info"
-          />
-          <Label>{monthDateFormatter(selectedArticle?.date)}</Label>
-        </div>
-        <Typography className="my-4" style="body2">
-          {selectedArticle?.content}
-        </Typography>
+        {selectedArticle?.title ? (
+          <>
+            <Typography className="my-2" style="h1">
+              {selectedArticle?.title}
+            </Typography>
+            <div className="flex">
+              <Tag
+                className="mr-4"
+                label={selectedArticle?.category.title}
+                style="info"
+              />
+              <Label>{monthDateFormatter(selectedArticle?.date)}</Label>
+            </div>
+            <Typography className="my-4" style="body2">
+              {selectedArticle?.content}
+            </Typography>
+          </>
+        ) : (
+          <Typography>No article in this category.</Typography>
+        )}
       </Container>
     </div>
   );

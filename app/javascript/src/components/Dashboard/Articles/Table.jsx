@@ -17,6 +17,10 @@ const Table = ({
   setShowAlert,
   handleEdit,
 }) => {
+  const LOCALE = {
+    emptyText: "No articles added yet",
+  };
+
   const columnData = [
     {
       title: "Title",
@@ -73,7 +77,12 @@ const Table = ({
   ].filter(col => col.hidden);
 
   return (
-    <NeetoUITable allowRowClick columnData={columnData} rowData={articles} />
+    <NeetoUITable
+      allowRowClick
+      columnData={columnData}
+      locale={LOCALE}
+      rowData={articles}
+    />
   );
 };
 
