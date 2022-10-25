@@ -2,6 +2,7 @@
 
 class CategoriesController < ApplicationController
   before_action :load_category!, only: %i[update destroy]
+  # before_action :move_and_delete, only: %i[destroy]
 
   def index
     @categories = Category.all.order("position ASC")
@@ -19,13 +20,8 @@ class CategoriesController < ApplicationController
   end
 
   def destroy
+    move_and_delete
     @category.destroy!
-    respond_with_success(t("successfully_deleted", entity: "Category"))
-  end
-
-  def move_and_delete
-    articles = Article.where(category_id: params[:curr_id]).update_all(category_id: params[:destination_id])
-    Category.find_by!(id: params[:curr_id]).destroy!
     respond_with_success(t("successfully_deleted", entity: "Category"))
   end
 
@@ -37,5 +33,9 @@ class CategoriesController < ApplicationController
 
     def category_params
       params.require(:category).permit(:title, :position)
+    end
+
+    def move_and_delete
+      @category.articles.update(category_id: params[:destination_id])
     end
 end

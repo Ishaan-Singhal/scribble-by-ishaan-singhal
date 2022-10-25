@@ -82,6 +82,9 @@ const Table = ({
       columnData={columnData}
       locale={LOCALE}
       rowData={articles}
+      pagination={{
+        defaultPageSize: 10,
+      }}
     />
   );
 };

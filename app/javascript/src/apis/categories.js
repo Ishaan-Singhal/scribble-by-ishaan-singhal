@@ -12,24 +12,14 @@ const update = ({ id, payload }) =>
     category: payload,
   });
 
-const destroy = ({ id, quiet }) => {
-  const path = quiet ? `/categories/${id}?quiet` : `/categories/${id}`;
-
-  return axios.delete(path);
-};
-
-const moveAndDelete = ({ currId, destinationId }) => {
-  const path = `/categories/delete/${currId}/${destinationId}`;
-
-  return axios.delete(path);
-};
+const destroy = ({ id, payload }) =>
+  axios.delete(`/categories/${id}`, { params: payload });
 
 const categoriesApi = {
   list,
   create,
   update,
   destroy,
-  moveAndDelete,
 };
 
 export default categoriesApi;
