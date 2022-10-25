@@ -11,7 +11,6 @@ import {
 } from "./utils";
 
 const Table = ({
-  articleVisible,
   articles,
   isColumnVisible,
   setSelectedSlug,
@@ -74,11 +73,7 @@ const Table = ({
   ].filter(col => col.hidden);
 
   return (
-    <NeetoUITable
-      allowRowClick
-      columnData={columnData}
-      rowData={articles[articleVisible.status]}
-    />
+    <NeetoUITable allowRowClick columnData={columnData} rowData={articles} />
   );
 };
 

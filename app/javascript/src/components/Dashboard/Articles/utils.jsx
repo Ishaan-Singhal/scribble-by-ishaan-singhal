@@ -35,3 +35,12 @@ export const renderCategoryTitle = category => (
 export const renderAuthorName = author => (
   <Typography style="body2">{author.name}</Typography>
 );
+
+export const searchArticleFilter = (articles, searchTerm) =>
+  articles?.filter(article => {
+    if (searchTerm !== "") {
+      return article?.title?.toLowerCase().includes(searchTerm?.toLowerCase());
+    }
+
+    return article;
+  });
