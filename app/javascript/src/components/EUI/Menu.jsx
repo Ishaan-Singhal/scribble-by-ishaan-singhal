@@ -17,6 +17,11 @@ const Menu = ({ categories, selectedArticle }) => {
               <div
                 className="m-2 cursor-pointer"
                 key={article.id}
+                style={{
+                  color:
+                    article.id === selectedArticle?.id &&
+                    "rgb(var(--neeto-ui-primary-800))",
+                }}
                 onClick={() => {
                   history.push(`/public/${article.slug}`);
                 }}
