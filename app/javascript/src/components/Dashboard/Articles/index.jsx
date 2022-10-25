@@ -167,7 +167,7 @@ const Articles = () => {
           <SubHeader
             leftActionBlock={
               <Typography component="h4" style="h4">
-                {articles[showArticles.status].length} Articles
+                {articles[showArticles.status]?.length} Articles
               </Typography>
             }
           />

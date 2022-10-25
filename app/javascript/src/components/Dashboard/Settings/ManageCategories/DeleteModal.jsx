@@ -33,9 +33,9 @@ const DeleteModal = ({
           payload: { title: "General" },
         });
       } else {
-        await categoriesApi.moveAndDelete({
-          currId: deleteCategory.id,
-          destinationId: destinationCategory.value,
+        await categoriesApi.destroy({
+          id: deleteCategory.id,
+          payload: { destination_id: destinationCategory.value },
         });
       }
       await fetchCategories();

@@ -83,6 +83,12 @@ const Menu = ({
             placeholder="Add new category"
             value={newCategory}
             onChange={e => setNewCategory(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === "Enter") {
+                createCategory();
+                setIsInputCollapsed(collapsed => !collapsed);
+              }
+            }}
           />
           <Button
             icon={Plus}

@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   constraints(lambda { |req| req.format == :json }) do
     resources :articles, except: %i[new edit], param: :slug
     resources :categories, except: %i[new edit show], param: :id
-    delete "/categories/delete/:curr_id/:destination_id", to: "categories#move_and_delete"
     resources :redirections, except: %i[new show edit], param: :id
     resource :organization, only: %i[show update]
 
