@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 
-import { Search, Plus } from "neetoicons";
-import { Typography } from "neetoui";
+import { Search, Plus, Close } from "neetoicons";
+import { Typography, Button, Input } from "neetoui";
 import { MenuBar } from "neetoui/layouts";
+
+import categoriesApi from "apis/categories";
+
+import { searchFilter } from "./utils";
 
 const Menu = ({
   articles,
@@ -11,14 +15,30 @@ const Menu = ({
   categories,
   setSelectedCategories,
   selectedCategories,
+  fetchCategories,
 }) => {
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
-  const SHOW_MENU = true;
+  const [searchTitle, setSearchTitle] = useState("");
+  const [newCategory, setNewCategory] = useState("");
+  const [isInputCollapsed, setIsInputCollapsed] = useState(true);
   const capitalize = word =>
     word[0].toUpperCase() + word.slice(1).toLowerCase();
 
+  const createCategory = async () => {
+    try {
+      await categoriesApi.create({
+        title: newCategory,
+      });
+      fetchCategories();
+    } catch (error) {
+      logger.error(error);
+    } finally {
+      setNewCategory("");
+    }
+  };
+
   return (
-    <MenuBar showMenu={SHOW_MENU} title="Articles">
+    <MenuBar showMenu title="Articles">
       {Object.keys(articles).map(keyStatus => (
         <MenuBar.Block
           active={keyStatus === showArticles.status}
@@ -37,6 +57,7 @@ const Menu = ({
           },
           {
             icon: Plus,
+            onClick: () => setIsInputCollapsed(collapsed => !collapsed),
           },
         ]}
       >
@@ -51,18 +72,48 @@ const Menu = ({
       </MenuBar.SubTitle>
       <MenuBar.Search
         collapse={isSearchCollapsed}
+        placeholder="Search category title"
+        value={searchTitle}
+        onChange={e => setSearchTitle(e.target.value)}
         onCollapse={() => setIsSearchCollapsed(true)}
       />
-      {categories.map(category => (
+      {!isInputCollapsed && (
+        <div className="my-2 flex space-x-2">
+          <Input
+            placeholder="Add new category"
+            value={newCategory}
+            onChange={e => setNewCategory(e.target.value)}
+          />
+          <Button
+            icon={Plus}
+            style="text"
+            type="submit"
+            onClick={() => {
+              createCategory();
+              setIsInputCollapsed(collapsed => !collapsed);
+            }}
+          />
+          <Button
+            icon={Close}
+            style="text"
+            type="reset"
+            onClick={() => {
+              setNewCategory("");
+              setIsInputCollapsed(collapsed => !collapsed);
+            }}
+          />
+        </div>
+      )}
+      {searchFilter(categories, searchTitle).map(category => (
         <MenuBar.Block
-          active={selectedCategories.includes(category.title)}
+          active={selectedCategories.includes(category.id)}
           count={category.count}
           key={category.id}
           label={category.title}
           onClick={() => {
-            const idx = selectedCategories.indexOf(category.title);
+            const idx = selectedCategories.indexOf(category.id);
             idx === -1
-              ? setSelectedCategories([...selectedCategories, category.title])
+              ? setSelectedCategories([...selectedCategories, category.id])
               : setSelectedCategories([
                   ...selectedCategories.slice(0, idx),
                   ...selectedCategories.slice(

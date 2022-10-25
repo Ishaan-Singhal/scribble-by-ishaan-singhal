@@ -18,6 +18,7 @@ import categoriesApi from "apis/categories";
 import { ARTICLE_COLUMNS } from "./constants";
 import Menu from "./Menu";
 import Table from "./Table";
+import { searchFilter } from "./utils";
 
 import Navbar from "../Navbar";
 
@@ -41,6 +42,7 @@ const Articles = () => {
   });
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [categoriesList, setCategoriesList] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   const handleEdit = slug => {
     history.push(`articles/${slug}/edit`);
@@ -51,6 +53,7 @@ const Articles = () => {
       const {
         data: { categories },
       } = await categoriesApi.list();
+      logger.info(categories);
       setCategoriesList(categories);
     } catch (error) {
       logger.error(error);
@@ -61,7 +64,7 @@ const Articles = () => {
     try {
       const {
         data: { articles },
-      } = await articlesApi.list();
+      } = await articlesApi.list(selectedCategories);
       logger.info(articles);
       setArticles(articles);
     } catch (error) {
@@ -94,7 +97,7 @@ const Articles = () => {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [selectedCategories]);
 
   if (loading) {
     return (
@@ -111,6 +114,7 @@ const Articles = () => {
         <Menu
           articles={articles}
           categories={categoriesList}
+          fetchCategories={fetchCategories}
           selectedCategories={selectedCategories}
           setSelectedCategories={setSelectedCategories}
           setShowArticles={setShowArticles}
@@ -153,8 +157,11 @@ const Articles = () => {
               </>
             }
             searchProps={{
-              onChange: () => {},
-              value: "",
+              placeholder: "Search article title",
+              onChange: e => {
+                setSearchText(e.target.value);
+              },
+              value: searchText,
             }}
           />
           <SubHeader
@@ -165,8 +172,7 @@ const Articles = () => {
             }
           />
           <Table
-            articleVisible={showArticles}
-            articles={articles}
+            articles={searchFilter(articles[showArticles.status], searchText)}
             handleEdit={handleEdit}
             isColumnVisible={isColumnVisible}
             selectedCategories={selectedCategories}

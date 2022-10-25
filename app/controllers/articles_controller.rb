@@ -6,6 +6,7 @@ class ArticlesController < ApplicationController
 
   def index
     articles = Article.all
+    articles = articles.where(category_id: params[:category_ids]) unless params[:category_ids].blank?
     @all_articles = articles
     @draft_articles = articles.draft
     @published_articles = articles.published
@@ -22,8 +23,7 @@ class ArticlesController < ApplicationController
   end
 
   def update
-    article = Article.find_by!(slug: params[:slug])
-    article.update!(article_params)
+    @article.update!(article_params)
     respond_with_success(t("successfully_updated", entity: "Article"))
   end
 

@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const list = () => axios.get("/articles");
+const list = payload =>
+  axios.get("/articles", { params: { category_ids: payload } });
 
 const show = slug => axios.get(`/articles/${slug}`);
 

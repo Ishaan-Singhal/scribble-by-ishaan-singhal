@@ -4,22 +4,19 @@ import { Table as NeetoUITable, Typography } from "neetoui";
 
 import { monthDateFormatter } from "utils/date";
 
-import { renderActionButtons, renderCategoryTitle } from "./utils";
+import {
+  renderActionButtons,
+  renderAuthorName,
+  renderCategoryTitle,
+} from "./utils";
 
 const Table = ({
-  articleVisible,
   articles,
   isColumnVisible,
   setSelectedSlug,
   setShowAlert,
   handleEdit,
-  selectedCategories,
 }) => {
-  const myFilter = myCategories =>
-    function filterData(value) {
-      return !(myCategories.indexOf(value.category.title) === -1);
-    };
-
   const columnData = [
     {
       title: "Title",
@@ -41,13 +38,14 @@ const Table = ({
       render: monthDateFormatter,
       hidden: isColumnVisible.createdAt,
     },
-    // {
-    //   title: "Author",
-    //   dataIndex: "author",
-    //   key: "author",
-    //   width: "15%",
-    //   hidden: isColumnVisible.author,
-    // },
+    {
+      title: "Author",
+      dataIndex: "author",
+      key: "author",
+      width: "15%",
+      render: author => renderAuthorName(author),
+      hidden: isColumnVisible.author,
+    },
     {
       title: "Category",
       dataIndex: "category",
@@ -75,15 +73,7 @@ const Table = ({
   ].filter(col => col.hidden);
 
   return (
-    <NeetoUITable
-      allowRowClick
-      columnData={columnData}
-      rowData={
-        selectedCategories.length > 0
-          ? articles.all.filter(myFilter(selectedCategories))
-          : articles[articleVisible.status]
-      }
-    />
+    <NeetoUITable allowRowClick columnData={columnData} rowData={articles} />
   );
 };
 
