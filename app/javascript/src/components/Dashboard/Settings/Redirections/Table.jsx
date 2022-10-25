@@ -11,8 +11,6 @@ const Table = ({ redirections, fetchRedirections }) => {
   const LOCALE = {
     emptyText: "No redirections added yet",
   };
-  const CURRENT_PAGE_NUMBER = 1;
-  const DEFAULT_PAGE_SIZE = 10;
 
   const [rowData, setRowData] = useState(REDIRECTION_INITIAL_VALUES);
   const [editId, setEditId] = useState(0);
@@ -120,10 +118,11 @@ const Table = ({ redirections, fetchRedirections }) => {
   return (
     <NeetoUITable
       columnData={columnData}
-      currentPageNumber={CURRENT_PAGE_NUMBER}
-      defaultPageSize={DEFAULT_PAGE_SIZE}
       locale={LOCALE}
       rowData={redirections}
+      pagination={{
+        defaultPageSize: 10,
+      }}
     />
   );
 };
