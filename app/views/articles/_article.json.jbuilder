@@ -9,3 +9,8 @@ json.category do
     :id,
     :title
 end
+json.author do
+  json.extract! article.user,
+    :id,
+    :name
+end

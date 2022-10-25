@@ -55,14 +55,14 @@ const Menu = ({
       />
       {categories.map(category => (
         <MenuBar.Block
-          active={selectedCategories.includes(category.title)}
+          active={selectedCategories.includes(category.id)}
           count={category.count}
           key={category.id}
           label={category.title}
           onClick={() => {
-            const idx = selectedCategories.indexOf(category.title);
+            const idx = selectedCategories.indexOf(category.id);
             idx === -1
-              ? setSelectedCategories([...selectedCategories, category.title])
+              ? setSelectedCategories([...selectedCategories, category.id])
               : setSelectedCategories([
                   ...selectedCategories.slice(0, idx),
                   ...selectedCategories.slice(

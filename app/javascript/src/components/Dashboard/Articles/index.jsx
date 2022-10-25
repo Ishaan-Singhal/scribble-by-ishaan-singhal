@@ -61,7 +61,7 @@ const Articles = () => {
     try {
       const {
         data: { articles },
-      } = await articlesApi.list();
+      } = await articlesApi.list(selectedCategories);
       logger.info(articles);
       setArticles(articles);
     } catch (error) {
@@ -94,7 +94,7 @@ const Articles = () => {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [selectedCategories]);
 
   if (loading) {
     return (

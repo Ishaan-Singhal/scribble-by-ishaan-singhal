@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Delete, Edit } from "neetoicons";
-import { Button, Tag } from "neetoui";
+import { Button, Tag, Typography } from "neetoui";
 
 export const renderActionButtons = (
   slug,
@@ -30,4 +30,8 @@ export const renderActionButtons = (
 
 export const renderCategoryTitle = category => (
   <Tag label={category.title} style="secondary" />
+);
+
+export const renderAuthorName = author => (
+  <Typography style="body2">{author.name}</Typography>
 );
