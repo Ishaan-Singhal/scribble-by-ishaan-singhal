@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { Warning } from "neetoicons";
-import { Modal, Typography, Select, Button, Callout } from "neetoui";
+import { Modal, Typography, Select, Button, Callout, Toastr } from "neetoui";
 
 import categoriesApi from "apis/categories";
 
@@ -33,10 +33,14 @@ const DeleteModal = ({
           payload: { title: "General" },
         });
       } else {
-        await categoriesApi.destroy({
-          id: deleteCategory.id,
-          payload: { destination_id: destinationCategory.value },
-        });
+        if (destinationCategory.value) {
+          await categoriesApi.destroy({
+            id: deleteCategory.id,
+            payload: { destination_id: destinationCategory.value },
+          });
+        } else {
+          Toastr.error("No category selected to move articles.");
+        }
       }
       await fetchCategories();
       setShowDeleteAlert(false);
@@ -59,9 +63,9 @@ const DeleteModal = ({
         <Callout icon={Warning} style="danger">
           {categories.length > 1 ? (
             <div className="text-base">
-              Category {deleteCategory?.title} has
-              {deleteCategory?.count} article(s). Before this category can be
-              deleted, these articles need to be moved to another category.
+              Category {deleteCategory?.title} has{` ${deleteCategory?.count} `}
+              article(s). Before this category can be deleted, these articles
+              need to be moved to another category.
             </div>
           ) : (
             <div className="text-base">
@@ -69,15 +73,16 @@ const DeleteModal = ({
             </div>
           )}
         </Callout>
-        {categories.length > 1 ? (
+        {categories.length > 1 && (
           <div className="mt-4">
             <Select
-              label="Select a category to move these articles into*"
+              required
+              label="Select a category to move these articles into"
               options={getCategoryOptionList()}
               onChange={cat => setDestinationCategory(cat)}
             />
           </div>
-        ) : null}
+        )}
       </Modal.Body>
       <Modal.Footer className="space-x-2">
         <Button

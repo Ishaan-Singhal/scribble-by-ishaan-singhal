@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_22_172556) do
+ActiveRecord::Schema.define(version: 2022_10_29_092220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 2022_10_22_172556) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "content"
-    t.uuid "category_id"
+    t.uuid "category_id", null: false
     t.uuid "user_id"
     t.index ["category_id"], name: "index_articles_on_category_id"
     t.index ["slug"], name: "index_articles_on_slug", unique: true
